@@ -1,0 +1,26 @@
+.custom-status-bar-income {
+    background-color: rgb(2, 170, 2);
+    color: #fff;
+    padding: 1px 10px; /* 
+    display: inline-block; /* Membuat bar hanya sebesar teksnya */
+    border-radius: 5px; /* Memberikan efek bulat pada ujung bar */
+}
+
+.custom-status-bar-expense {
+    background-color: rgb(190, 18, 12);
+    color: #fff;
+    padding: 1px 10px; /* 
+    display: inline-block; /* Membuat bar hanya sebesar teksnya */
+    border-radius: 5px; /* Memberikan efek bulat pada ujung bar */
+}
+
+.custom-number-meal{
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none;
+}
+
+td{
+    padding: 2px 10px;
+    
+}

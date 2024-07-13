@@ -1,5 +1,8 @@
 <?php
 
+use App\Livewire\Dashboard;
+use App\Livewire\Transactions;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes(['register' => false]);
+
+Route::get('/admin', Dashboard::class);
+
+Route::get('/admin/transaksi', Transactions::class);
+
