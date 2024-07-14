@@ -32,6 +32,8 @@
     <script src="{{ asset('assets/js/customAlert.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/select2.main.css') }}">
     <script src="{{ asset('assets/js/select2.main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     @livewireStyles
 </head>
 

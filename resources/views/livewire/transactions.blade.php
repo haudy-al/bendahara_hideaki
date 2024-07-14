@@ -83,7 +83,7 @@
                                                             @foreach ($DataSiswa as $item)
                                                                 <ul>
                                                                     <li><span
-                                                                            wire:click="setSiswa({{ $item->id }})">{{ $item->name }}</span>
+                                                                            wire:click="setSiswa({{ $item->id }})">({{ $item->batch }}){{ $item->name }}</span>
                                                                     </li>
                                                                 </ul>
                                                             @endforeach
@@ -244,7 +244,7 @@
                                                         @foreach ($DataSiswa as $item)
                                                             <ul>
                                                                 <li><span
-                                                                        wire:click="setSiswa({{ $item->id }})">{{ $item->name }}</span>
+                                                                        wire:click="setSiswa({{ $item->id }})">({{ $item->batch }}){{ $item->name }}</span>
                                                                 </li>
                                                             </ul>
                                                         @endforeach
@@ -335,7 +335,7 @@
                                                         @foreach ($DataSiswa as $item)
                                                             <ul>
                                                                 <li><span
-                                                                        wire:click="setSiswa({{ $item->id }})">{{ $item->name }}</span>
+                                                                        wire:click="setSiswa({{ $item->id }})">({{ $item->batch }}){{ $item->name }}</span>
                                                                 </li>
                                                             </ul>
                                                         @endforeach
