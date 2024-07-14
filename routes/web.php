@@ -2,6 +2,7 @@
 
 use App\Livewire\Dashboard;
 use App\Livewire\Transactions;
+use App\Livewire\UserAcount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +23,9 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false]);
 
-Route::get('/admin', Dashboard::class);
-
-Route::get('/admin/transaksi', Transactions::class);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin', Dashboard::class);
+    Route::get('/admin/transaksi', Transactions::class);
+    Route::get('/admin/user', UserAcount::class);
+});
 

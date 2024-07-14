@@ -26,7 +26,12 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/customAlert.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('assets/js/customAlert.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/css/select2.main.css') }}">
+    <script src="{{ asset('assets/js/select2.main.js') }}"></script>
     @livewireStyles
 </head>
 
@@ -74,6 +79,11 @@
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link " href="/admin/transaksi" role="button" v-pre>
                                     Transaksi
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link " href="/admin/user" role="button" v-pre>
+                                    User
                                 </a>
                             </li>
                             <li class="nav-item dropdown">

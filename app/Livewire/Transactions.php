@@ -13,13 +13,17 @@ class Transactions extends Component
     use WithPagination;
 
     public $statusBtnAdd = false;
-    public $type_income = 'uang_makan_siswa';
+    public $typeAdd = 'uang_makan_siswa';
     public $startOfWeek;
     public $search;
+    public $SearchSiswa;
 
     public $displayAmount = '';
     public $amount = 0;
+    public $amountGlobal = 0;
     public $siswa = '';
+    public $dateIncome;
+    public $deskripsi = '';
 
     public $price_meal = 5000;
 
@@ -51,13 +55,13 @@ class Transactions extends Component
 
     function searchDataTransaction()
     {
-        $transactions = Transaction::whereHas('user', function($query) {
+        $transactions = Transaction::whereHas('user', function ($query) {
             $query->where('name', 'like', '%' . $this->search . '%');
         })
-        ->orWhere('description', 'like', '%' . $this->search . '%')
-        ->orWhere('amount', 'like', '%' . $this->search . '%')
-        ->orderBy('date','DESC')
-        ->paginate(10);
+            ->orWhere('description', 'like', '%' . $this->search . '%')
+            ->orWhere('amount', 'like', '%' . $this->search . '%')
+            ->orderBy('date', 'DESC')
+            ->paginate(10);
         return $transactions;
     }
 
@@ -65,11 +69,16 @@ class Transactions extends Component
     {
         $DataTransaction = $this->getDataTransaction();
         if ($this->search) {
-
             $DataTransaction = $this->searchDataTransaction();
         }
 
         $dataSiswa = User::all();
+        if ($this->SearchSiswa) {
+            $dataSiswa = User::where('name', 'like', '%' . $this->SearchSiswa . '%')
+                ->limit(5)
+                ->get();
+        }
+
         return view('livewire.transactions', [
             'DataTransaction' => $DataTransaction,
             'DataSiswa' => $dataSiswa,
@@ -82,6 +91,13 @@ class Transactions extends Component
         $this->render();
     }
 
+    function setSiswa($id)
+    {
+
+        $this->siswa = $id;
+        $this->SearchSiswa = '';
+    }
+
     function saldo()
     {
         $income = Transaction::where('type', 'income')->sum('amount');
@@ -89,15 +105,20 @@ class Transactions extends Component
         return $income - $expense;
     }
 
-    function btnAdd()
+    function btnAdd($type = 'income')
     {
         $this->statusBtnAdd = true;
+        if ($type == 'income') {
+            $this->typeAdd = 'uang_makan_siswa';
+        } elseif ($type = 'expense') {
+            $this->typeAdd = 'input_expense';
+        }
     }
 
     function btnCloseAdd()
     {
         $this->statusBtnAdd = false;
-        $this->type_income = 'uang_makan_siswa';
+        $this->typeAdd = 'uang_makan_siswa';
     }
 
 
@@ -138,7 +159,7 @@ class Transactions extends Component
             if ($this->{'check_' . $day}) {
                 $nextDay = $nextWeek->copy()->startOfWeek()->addDays(array_search($day, $days));
                 $transaction = new Transaction();
-                $transaction->user_id = $this->siswa; // Sesuaikan dengan user_id yang sesuai
+                $transaction->user_id = $this->siswa;
                 $transaction->date = $nextDay;
                 $transaction->amount = $this->{'count_meal_' . $day} * $this->price_meal;
                 $transaction->description = 'Uang makan';
@@ -147,7 +168,6 @@ class Transactions extends Component
             }
         }
 
-        // Reset form setelah penyimpanan
         $this->startOfWeek = null;
         $this->statusBtnAdd = false;
         $this->siswa = '';
@@ -168,6 +188,68 @@ class Transactions extends Component
     {
         // dd($this->all());
         $this->saveTransactions();
+    }
+
+    function AddIncomeLainnya()
+    {
+        $this->validate([
+            'siswa' => 'required',
+            'dateIncome' => 'required',
+            'amountGlobal' => 'required',
+            'deskripsi' => 'required'
+        ], [
+            'siswa.required' => 'Data Siswa Wajib Diisi',
+            'dateIncome.required' => 'Data Tanggal Wajib Diisi',
+            'deskripsi.required' => 'Data deskripsi Wajib Diisi',
+            'amountGlobal.required' => 'Jumlah Uang Wajib Diisi'
+        ]);
+
+        $transaction = new Transaction();
+        $transaction->user_id = $this->siswa;
+        $transaction->date = $this->dateIncome;
+        $transaction->amount = $this->amountGlobal;
+        $transaction->description = $this->deskripsi;
+        $transaction->type = 'income';
+        $transaction->save();
+
+        $this->dateIncome = null;
+        $this->statusBtnAdd = false;
+        $this->siswa = '';
+        $this->amountGlobal = 0;
+        $this->deskripsi = '';
+
+        $this->dispatch('success', ['message' => 'Data Berhasil Ditambahkan']);
+    }
+
+    function AddExpense()
+    {
+        $this->validate([
+            'siswa' => 'required',
+            'dateIncome' => 'required',
+            'amountGlobal' => 'required',
+            'deskripsi' => 'required'
+        ], [
+            'siswa.required' => 'Data Siswa Wajib Diisi',
+            'dateIncome.required' => 'Data Tanggal Wajib Diisi',
+            'deskripsi.required' => 'Data deskripsi Wajib Diisi',
+            'amountGlobal.required' => 'Jumlah Uang Wajib Diisi'
+        ]);
+
+        $transaction = new Transaction();
+        $transaction->user_id = $this->siswa;
+        $transaction->date = $this->dateIncome;
+        $transaction->amount = $this->amountGlobal;
+        $transaction->description = $this->deskripsi;
+        $transaction->type = 'expense';
+        $transaction->save();
+
+        $this->dateIncome = null;
+        $this->statusBtnAdd = false;
+        $this->siswa = '';
+        $this->amountGlobal = 0;
+        $this->deskripsi = '';
+
+        $this->dispatch('success', ['message' => 'Data Berhasil Ditambahkan']);
     }
 
     function DeleteTransaction($id)
