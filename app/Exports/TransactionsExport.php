@@ -3,10 +3,12 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class TransactionsExport implements FromCollection, WithHeadings, WithColumnFormatting
+class TransactionsExport implements FromCollection, WithHeadings, WithStyles, WithColumnWidths
 {
     protected $transactions;
 
@@ -24,7 +26,6 @@ class TransactionsExport implements FromCollection, WithHeadings, WithColumnForm
             if ($transactions->first()->type_amount == 'others') {
                 return $transactions->map(function ($transaction) {
                     return [
-                        'id' => $transaction->id,
                         'user_name' => $transaction->user->name,
                         'date' => $transaction->date,
                         'amount' => $transaction->amount,
@@ -39,7 +40,6 @@ class TransactionsExport implements FromCollection, WithHeadings, WithColumnForm
                 $first = $transactions->first();
                 $totalAmount = $transactions->sum('amount');
                 return [[
-                    'id' => $first->id,
                     'user_name' => $first->user->name,
                     'date' => $first->date,
                     'amount' => $totalAmount,
@@ -57,7 +57,6 @@ class TransactionsExport implements FromCollection, WithHeadings, WithColumnForm
         
         // Add total amount row
         $groupedTransactions->push([
-            'id' => '',
             'user_name' => '',
             'date' => '',
             'amount' => $totalAmount,
@@ -68,13 +67,18 @@ class TransactionsExport implements FromCollection, WithHeadings, WithColumnForm
             'updated_at' => '',
         ]);
 
-        return $groupedTransactions->values();
+        // Add sequence number
+        $groupedTransactionsWithNumber = $groupedTransactions->values()->map(function ($item, $key) {
+            return array_merge(['number' => $key + 1], $item);
+        });
+
+        return $groupedTransactionsWithNumber;
     }
 
     public function headings(): array
     {
         return [
-            'ID',
+            'No',
             'User Name',
             'Date',
             'Amount',
@@ -86,11 +90,39 @@ class TransactionsExport implements FromCollection, WithHeadings, WithColumnForm
         ];
     }
 
-    public function columnFormats(): array
+    public function styles(Worksheet $sheet)
+    {
+        $sheet->getStyle('A1:I1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['rgb' => 'FF0000'],
+            ],
+        ]);
+
+        // Auto size columns
+        foreach (range('A', 'I') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        return [];
+    }
+
+    public function columnWidths(): array
     {
         return [
-            'D' => NumberFormat::FORMAT_NUMBER_00, // Assuming 'D' is the column for 'Amount'
+            'A' => 5,
+            'B' => 20,
+            'C' => 15,
+            'D' => 15,
+            'E' => 30,
+            'F' => 15,
+            'G' => 15,
+            'H' => 20,
+            'I' => 20,
         ];
     }
 }
-
