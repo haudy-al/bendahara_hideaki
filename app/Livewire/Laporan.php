@@ -6,40 +6,46 @@ use App\Exports\TransactionsExport;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 
 class Laporan extends Component
 {
+    use WithPagination;
     public $month;
     public $week;
+    function mount()
+    {
+        $this->month = Carbon::now()->format('Y-m');
+        $this->week = Carbon::now()->weekOfYear;
+    }
+
 
     public function render()
     {
-        $defaultWeek = 3;
-        $defaultMonth = Carbon::now()->format('Y-m');;
+        // $defaultWeek = Carbon::now()->weekOfYear;
+        // $defaultMonth = Carbon::now()->format('Y-m');;
 
-        if ($this->week) {
-            $defaultWeek = $this->week;
-        }if ($this->month) {
-            $defaultMonth = $this->month;
-        }
+        // if ($this->week) {
+        //     $defaultWeek = $this->week;
+        // }if ($this->month) {
+        //     $defaultMonth = $this->month;
+        // }
 
-
-
-        $startOfMonth = Carbon::create($defaultMonth)->startOfMonth();
-        $startDate = $startOfMonth->copy()->addWeeks($defaultWeek - 1);
+        $startOfMonth = Carbon::create($this->month)->startOfMonth();
+        $startDate = $startOfMonth->copy()->addWeeks($this->week - 1);
         $endDate = $startDate->copy()->endOfWeek();
 
         $DataTransactions = Transaction::with('user')
-            // ->where('type', 'income')
+            ->where('type', 'income')
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
 
-            dd($DataTransactions);
-            
+        // dd($DataTransactions);
 
-        return view('livewire.laporan',[
-            'DataTransactions'=>$DataTransactions
+
+        return view('livewire.laporan', [
+            'DataTransaction' => $DataTransactions
         ]);
     }
 
