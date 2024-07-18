@@ -11,19 +11,21 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 class TransactionsExport implements FromCollection, WithHeadings, WithStyles, WithColumnWidths
 {
     protected $transactions;
+    public $type;
 
-    public function __construct($transactions)
+    public function __construct($transactions,$type)
     {
         $this->transactions = $transactions;
+        $this->type = $type;
+        
     }
 
     public function collection()
     {
-        // Separate transactions by type_amount
         $groupedTransactions = $this->transactions->groupBy(function ($transaction) {
             return $transaction->type_amount == 'others' ? uniqid() : $transaction->user_id;
         })->map(function ($transactions, $key) {
-            if ($transactions->first()->type_amount == 'others') {
+            if ($transactions->first()->type_amount == 'others' || $transactions->first()->type == 'expense') {
                 return $transactions->map(function ($transaction) {
                     return [
                         'user_name' => $transaction->user->name,
@@ -92,6 +94,12 @@ class TransactionsExport implements FromCollection, WithHeadings, WithStyles, Wi
 
     public function styles(Worksheet $sheet)
     {
+
+        $paint = '079707';
+        if ($this->type == 'expense') {
+            $paint = 'df0202';
+        }
+
         $sheet->getStyle('A1:I1')->applyFromArray([
             'font' => [
                 'bold' => true,
@@ -99,7 +107,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithStyles, Wi
             ],
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'color' => ['rgb' => '079707'],
+                'color' => ['rgb' => $paint],
             ],
         ]);
 

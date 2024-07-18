@@ -114,6 +114,15 @@
                     </div>
     
                     <div class="card-body">
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div>
+                                        <button class="btn btn-success btn-sm" wire:click="export('expense')">Export to Excel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         
                         
                         <div class="table-responsive">

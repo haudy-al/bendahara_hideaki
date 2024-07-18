@@ -376,6 +376,21 @@
                                                 @enderror
                                             </div>
 
+                                            <div class="mb-3">
+                                                <label for="NamaU" class="form-label">Jenis Pengeluaran</label>
+                                                
+                                                <select class="form-control" wire:model.live='type_amount'>
+                                                    <option value="meal">Makanan</option>
+                                                    <option value="others">Lainnya</option>
+                                                </select>
+
+                                                @error('type_amount')
+                                                    <span class="text-danger">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
