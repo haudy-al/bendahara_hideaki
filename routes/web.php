@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Dashboard;
+use App\Livewire\Laporan;
 use App\Livewire\Transactions;
 use App\Livewire\UserAcount;
 use Illuminate\Support\Facades\Auth;
@@ -27,5 +28,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin', Dashboard::class);
     Route::get('/admin/transaksi', Transactions::class);
     Route::get('/admin/user', UserAcount::class);
+    Route::get('/admin/laporan', Laporan::class);
 });
 
