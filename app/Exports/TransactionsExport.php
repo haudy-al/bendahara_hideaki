@@ -99,7 +99,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithStyles, Wi
             ],
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'color' => ['rgb' => 'FF0000'],
+                'color' => ['rgb' => '079707'],
             ],
         ]);
 

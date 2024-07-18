@@ -41,11 +41,16 @@ class Laporan extends Component
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
 
+        $DataTransactionsExpense = Transaction::with('user')
+            ->where('type', 'expense')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->get();
+
         // dd($DataTransactions);
 
-
         return view('livewire.laporan', [
-            'DataTransaction' => $DataTransactions
+            'DataTransaction' => $DataTransactions,
+            'DataTransactionsExpense' => $DataTransactionsExpense,
         ]);
     }
 

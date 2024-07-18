@@ -101,19 +101,79 @@
                             </table>
                             {{-- {{ $DataTransaction->links('') }} --}}
                         </div>
-                        
-                        <script>
-                            function confirmDelete(itemId) {
-                                if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-                                    Livewire.emit('DeleteTransactionEmit', { id: itemId });
-                                }
-                            }
-                        </script>
-                        
-                        
+                     
                     </div>
                         
                 </div>
+
+
+                <div class="card">
+                    <div class="card-header ">
+                        <span>Laporan Pengeluaran Mingguan</span>
+                        
+                    </div>
+    
+                    <div class="card-body">
+                        
+                        
+                        <div class="table-responsive">
+                            <table id="" class="table table-bar">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nama</th>
+                                        <th>Jenis</th>
+                                        <th>Tanggal</th>
+                                        <th>Deskripsi</th>
+                                        <th>Uang</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @php
+                                        $totalAmountExpense = 0;
+                                    @endphp
+
+                                    @foreach ($DataTransactionsExpense as $key => $item)
+                                        <tr>
+                                            <td>{{ ++$key }}.
+                                            </td>
+                                            <td>{{ $item->user->name ?? '-' }}</td>
+                                            <td><span
+                                                    class="custom-status-bar-{{ $item->type }}">{{ $item->type }}</span>
+                                            </td>
+                                            <td id="tanggal-col">{{ $item->date }}</td>
+                                            <td>{{ $item->description }}</td>
+                                            <td>Rp.{{ number_format($item->amount, 0, ',', '.') }}</td>
+                                            
+                                        </tr>
+
+                                        @php
+                                            $totalAmountExpense += $item->amount;
+                                        @endphp
+
+                                        
+                                    @endforeach
+
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Total Amount</strong></td>
+                                        <td>Rp.{{ number_format($totalAmountExpense, 0, ',', '.') }}</td>
+                                        <td></td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                     
+                    </div>
+                        
+                </div>
+
+
+
+                
             </div>
         </div>
     </div>
