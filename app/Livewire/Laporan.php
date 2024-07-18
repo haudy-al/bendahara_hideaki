@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Exports\TransactionsExpenseExport;
 use App\Exports\TransactionsExport;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -65,6 +66,21 @@ class Laporan extends Component
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
 
-        return Excel::download(new TransactionsExport($transactions), 'transactions_week_' . $this->week . '.xlsx');
+            return Excel::download(new TransactionsExport($transactions,$type), 'transactions_'.$this->month.'__week_' . $this->week . '.xlsx');
+        
+ 
     }
+
+    // public function exporTexpense()
+    // {
+    //     $startOfMonth = Carbon::create($this->month)->startOfMonth();
+    //     $startDate = $startOfMonth->copy()->addWeeks($this->week - 1);
+    //     $endDate = $startDate->copy()->endOfWeek();
+
+    //     $transactions = Transaction::with('user')
+    //     ->whereBetween('date', [$startDate, $endDate])
+    //     ->get();
+
+    //     return Excel::download(new TransactionsExport($transactions), 'transactions_week_' . $this->week . '.xlsx');
+    // }
 }

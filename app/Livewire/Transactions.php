@@ -20,6 +20,7 @@ class Transactions extends Component
 
     public $displayAmount = '';
     public $amount = 0;
+    public $type_amount = 'meal';
     public $amountGlobal = 0;
     public $siswa = '';
     public $dateIncome;
@@ -210,6 +211,7 @@ class Transactions extends Component
         $transaction->amount = $this->amountGlobal;
         $transaction->description = $this->deskripsi;
         $transaction->type = 'income';
+        $transaction->type_amount = 'others';
         $transaction->save();
 
         $this->dateIncome = null;
@@ -241,6 +243,7 @@ class Transactions extends Component
         $transaction->amount = $this->amountGlobal;
         $transaction->description = $this->deskripsi;
         $transaction->type = 'expense';
+        $transaction->type_amount = $this->type_amount;
         $transaction->save();
 
         $this->dateIncome = null;
