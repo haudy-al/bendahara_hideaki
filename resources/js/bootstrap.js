@@ -2,11 +2,15 @@ import 'bootstrap';
 
 import DataTable from 'datatables.net-dt';
 import flatpickr from "flatpickr";
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
 
 
 flatpickr("#cutomDate1", {
     enable: ["2025-03-30", "2025-05-21", "2025-06-08", new Date(2025, 8, 9) ]
 });
+
+window.Swal = Swal;
 
  
 
