@@ -378,7 +378,7 @@
 
                                             <div class="mb-3">
                                                 <label for="NamaU" class="form-label">Jenis Pengeluaran</label>
-                                                
+
                                                 <select class="form-control" wire:model.live='type_amount'>
                                                     <option value="meal">Makanan</option>
                                                     <option value="others">Lainnya</option>
@@ -455,11 +455,29 @@
 
                                         <script>
                                             function confirmDelete(itemId) {
-                                                if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-                                                    Livewire.dispatch('DeleteTransactionEmit', {
-                                                        "id": itemId
-                                                    });
-                                                }
+
+
+                                                Swal.fire({
+                                                    title: 'Perhatian',
+                                                    text: "Yakin Menghapus Data Ini ?",
+                                                    icon: 'danger',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    cancelButtonText: 'Batal',
+                                                    confirmButtonText: 'Ya'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        Livewire.dispatch('DeleteTransactionEmit', {
+                                                            "id": itemId
+                                                        });
+                                                        Swal.fire(
+                                                            'Deleted!',
+                                                            'Your file has been deleted.',
+                                                            'success'
+                                                        )
+                                                    }
+                                                })
                                             }
                                         </script>
                                     @endforeach
