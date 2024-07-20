@@ -24,28 +24,41 @@ class Laporan extends Component
 
     public function render()
     {
-        
+        // dd($this->getTransactionMonthIncome());
 
+        return view('livewire.laporan', [
+            'DataTransaction' => $this->getTransaction('income'),
+            'DataTransactionsExpense' => $this->getTransaction('expense'),
+            'DataTransactionMonthIncome' => $this->getTransactionMonth('income'),
+            'DataTransactionMonthExpense' => $this->getTransactionMonth('expense'),
+        ]);
+    }
+
+    function getTransaction($type) {
         $startOfMonth = Carbon::create($this->month)->startOfMonth();
         $startDate = $startOfMonth->copy()->addWeeks($this->week - 1);
         $endDate = $startDate->copy()->endOfWeek();
 
         $DataTransactions = Transaction::with('user')
-            ->where('type', 'income')
+            ->where('type', $type)
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
 
-        $DataTransactionsExpense = Transaction::with('user')
-            ->where('type', 'expense')
-            ->whereBetween('date', [$startDate, $endDate])
+        return $DataTransactions;
+    }
+
+    function getTransactionMonth($type)
+    {
+        [$year, $month] = explode('-', $this->month);
+
+
+        $transactions = Transaction::with('user')
+            ->where('type', $type)
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
             ->get();
 
-        // dd($DataTransactions);
-
-        return view('livewire.laporan', [
-            'DataTransaction' => $DataTransactions,
-            'DataTransactionsExpense' => $DataTransactionsExpense,
-        ]);
+        return $transactions;
     }
 
     public function export($type = 'income')
@@ -59,8 +72,19 @@ class Laporan extends Component
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
 
-            return Excel::download(new TransactionsExport($transactions,$type), 'transactions_'.$this->month.'__week_' . $this->week . '.xlsx');
- 
+        return Excel::download(new TransactionsExport($transactions, $type), 'transactions_' . $this->month . '__week_' . $this->week . '.xlsx');
     }
 
+    public function exportMonth($type = 'income')
+    {
+        [$year, $month] = explode('-', $this->month);
+
+        $transactions = Transaction::with('user')
+            ->where('type', $type)
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get();
+
+        return Excel::download(new TransactionsExport($transactions, $type), 'transactions_' . $this->month . '__week_' . '.xlsx');
+    }
 }
