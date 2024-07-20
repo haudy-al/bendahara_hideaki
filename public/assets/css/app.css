@@ -24,3 +24,18 @@ td{
     padding: 2px 10px;
     
 }
+
+.header-xyza {
+    
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+.fixed-xyza {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+.content-xyza {
+    margin-top: 100px; 
+}
+
