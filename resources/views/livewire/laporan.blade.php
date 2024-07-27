@@ -173,7 +173,7 @@
                                     <tr>
                                         <td>{{ ++$key }}.
                                         </td>
-                                        <td>{{ $item->user->name ?? '-' }}</td>
+                                        <td>{{ $item->user->name ?? '-' }} ({{ $item->user->batch ?? '-' }})</td>
                                         <td><span
                                                 class="custom-status-bar-{{ $item->type }}">{{ $item->type }}</span>
                                         </td>

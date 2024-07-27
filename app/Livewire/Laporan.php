@@ -34,12 +34,15 @@ class Laporan extends Component
         ]);
     }
 
-    function getTransaction($type) {
+    function getTransaction($type)
+    {
         $startOfMonth = Carbon::create($this->month)->startOfMonth();
         $startDate = $startOfMonth->copy()->addWeeks($this->week - 1);
         $endDate = $startDate->copy()->endOfWeek();
 
-        $DataTransactions = Transaction::with('user')
+        $DataTransactions = Transaction::with(['user' => function ($query) {
+            $query->orderBy('batch', 'DESC');
+        }])
             ->where('type', $type)
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
@@ -67,7 +70,9 @@ class Laporan extends Component
         $startDate = $startOfMonth->copy()->addWeeks($this->week - 1);
         $endDate = $startDate->copy()->endOfWeek();
 
-        $transactions = Transaction::with('user')
+        $transactions = Transaction::with(['user' => function ($query) {
+            $query->orderBy('batch', 'DESC');
+        }])
             ->where('type', $type)
             ->whereBetween('date', [$startDate, $endDate])
             ->get();

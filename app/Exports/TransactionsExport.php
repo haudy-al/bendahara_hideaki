@@ -29,6 +29,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithStyles, Wi
                 return $transactions->map(function ($transaction) {
                     return [
                         'user_name' => $transaction->user->name,
+                        'batch' => $transaction->user->batch,
                         'date' => $transaction->date,
                         'amount' => $transaction->amount,
                         'description' => $transaction->description,
@@ -43,6 +44,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithStyles, Wi
                 $totalAmount = $transactions->sum('amount');
                 return [[
                     'user_name' => $first->user->name,
+                    'batch' => $first->user->batch,
                     'date' => $first->date,
                     'amount' => $totalAmount,
                     'description' => $first->description,
@@ -82,6 +84,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithStyles, Wi
         return [
             'No',
             'User Name',
+            'Batch',
             'Date',
             'Amount',
             'Description',
@@ -100,7 +103,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithStyles, Wi
             $paint = 'df0202';
         }
 
-        $sheet->getStyle('A1:I1')->applyFromArray([
+        $sheet->getStyle('A1:J1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -112,7 +115,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithStyles, Wi
         ]);
 
         // Auto size columns
-        foreach (range('A', 'I') as $columnID) {
+        foreach (range('A', 'J') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -131,6 +134,7 @@ class TransactionsExport implements FromCollection, WithHeadings, WithStyles, Wi
             'G' => 15,
             'H' => 20,
             'I' => 20,
+            'J' => 20,
         ];
     }
 }
