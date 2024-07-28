@@ -22,11 +22,19 @@ class AdminSeeder extends Seeder
         //     'batch'=>'1'
         // ]);
 
+        // User::create([
+        //     'name' => 'haudy',
+        //     'email' => 'haudy@gmail.com',
+        //     'password' => Hash::make('Admin123!'),
+        //     'role' => 'student',
+        //     'batch'=>'1'
+        // ]);
+
         User::create([
-            'name' => 'haudy',
-            'email' => 'haudy@gmail.com',
-            'password' => Hash::make('Admin123!'),
-            'role' => 'student',
+            'name' => 'Bendahara 1',
+            'email' => 'muhamadhaudy25@gmail.com',
+            'password' => Hash::make('St76#wW2!'),
+            'role' => 'admin',
             'batch'=>'1'
         ]);
     }
