@@ -26,21 +26,22 @@
                         <div class="card-body">
                             
                             <div class="row">
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <div>
                                         <label for="month">Month:</label>
                                         <input class="form-control" type="month" id="month" wire:model.live="month">
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-4">
                                     <div>
-                                        <label for="week">Week:</label>
-                                        <select class="form-control" id="week" wire:model.live="week">
+                                        <label for="week">Tanggal Transaksi:</label>
+                                        <input type="date" id="sunday-date" class="form-control" wire:model.live="date" >
+                                        {{-- <select class="form-control" id="week" wire:model.live="week">
                                             <option value="1">First Week</option>
                                             <option value="2">Second Week</option>
                                             <option value="3">Third Week</option>
                                             <option value="4">Fourth Week</option>
-                                        </select>
+                                        </select> --}}
                                     </div>
                                 </div>
                             </div>
@@ -329,7 +330,7 @@
                                 @endphp
                     
                                 @foreach ($groupedTransactionMonthExpense as $group)
-                                    @if ($group->first()->type_amount == 'others')
+                                    @if ($group->first()->type_amount == 'others' || $group->first()->type == 'expense')
                                         @foreach ($group as $item)
                                             <tr>
                                                 <td>{{ $numberMonthIncome++ }}</td>
@@ -394,6 +395,15 @@
                 header.classList.add("fixed-xyza");
             } else {
                 header.classList.remove("fixed-xyza");
+            }
+        }
+
+        function validateDay(input) {
+            const selectedDate = new Date(input.value);
+            const day = selectedDate.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+            if (day !== 0) {
+                alert('Silakan pilih hari Minggu sebagai awal minggu pembayaran.');
+                input.value = ''; // Reset input jika bukan hari Minggu
             }
         }
     </script>

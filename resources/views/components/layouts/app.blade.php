@@ -18,8 +18,8 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />    <!-- Ionicons -->
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet"
@@ -38,7 +38,7 @@
     <link rel="stylesheet" href="{{ asset('Template') }}/plugins/summernote/summernote-bs4.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/customAlert.css') }}">
-    
+
     <script src="{{ asset('assets/js/customAlert.js') }}"></script>
 
 
@@ -58,10 +58,11 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                            class="fas fa-bars"></i></a>
                 </li>
-                
-              </ul>
+
+            </ul>
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
@@ -154,7 +155,8 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/admin" class="nav-link @if ($iniUrl == 'http://' . $_SERVER['HTTP_HOST'] . '/admin') active @endif">
+                                    <a href="/admin"
+                                        class="nav-link @if ($iniUrl == 'http://' . $_SERVER['HTTP_HOST'] . '/admin') active @endif">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Dashboard</p>
                                     </a>
@@ -163,7 +165,8 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="/admin/transaksi" class="nav-link @if ($iniUrl == 'http://' . $_SERVER['HTTP_HOST'] . '/admin/transaksi') active @endif">
+                            <a href="/admin/transaksi"
+                                class="nav-link @if ($iniUrl == 'http://' . $_SERVER['HTTP_HOST'] . '/admin/transaksi') active @endif">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
                                     Transaksi
@@ -190,6 +193,21 @@
                                 </p>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <form method="post" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="nav-link">
+                                    <p>
+                                        Logout
+    
+                                    </p>
+                                </button>
+                            </form>
+                        </li>
+
+                        
+
 
 
                     </ul>

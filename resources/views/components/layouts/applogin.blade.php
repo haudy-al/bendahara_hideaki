@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            background: linear-gradient(135deg, #5486a7, #1f1f1f);
             display: flex;
             justify-content: center;
             align-items: center;

@@ -51,27 +51,203 @@
 
                         </h3>
 
+
+
                         <div class="card-tools">
                             <h4>
                                 <b>Saldo : Rp.{{ number_format($saldo, 0, ',', '.') }}</b>
                             </h4>
 
                         </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0" style="height: 400px;">
+
                         @if ($statusBtnAdd == true)
-                            <div class="card">
-                                {{-- <div class="card-header">
-                              <h3 class="card-title"></h3>
-                            </div> --}}
-                                <div class="card-body">
-                                    @if ($typeAdd == 'uang_makan_siswa')
-                                        <div class="mb-3">
+                            <div class="card-title mt-5">
 
-                                            <form>
+                                <div class="card">
+                                    {{-- <div class="card-header">
+                                <h3 class="card-title"></h3>
+                                </div> --}}
+                                    <div class="card-body">
+                                        @if ($typeAdd == 'uang_makan_siswa')
+                                            <div class="mb-3">
+
+                                                <form>
+                                                    <div class="row">
+
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3 position-relative">
+                                                                <label for="NamaU" class="form-label">Siswa</label>
+                                                                <div class="input-group">
+
+                                                                    <select wire:model="siswa" id="selectOp"
+                                                                        class="form-control searchSelect"
+                                                                        @if (!empty($SearchSiswa)) disabled @endif>
+                                                                        <option value=""
+                                                                            @if (!$siswa) selected @endif>
+                                                                            ----Pilih----</option>
+
+                                                                        @foreach ($DataSiswa as $item)
+                                                                            <option
+                                                                                @if ($siswa == $item->id) selected @endif
+                                                                                value="{{ $item->id }}">
+                                                                                {{ $item->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <input type="text" placeholder="Cari Siswa..."
+                                                                        class="form-control"
+                                                                        wire:model.live="SearchSiswa">
+
+                                                                </div>
+
+                                                                @if (!empty($SearchSiswa))
+                                                                    <div class="mb-3 mt-3">
+                                                                        @foreach ($DataSiswa as $item)
+                                                                            <ul>
+                                                                                <li><span
+                                                                                        wire:click="setSiswa({{ $item->id }})">({{ $item->batch }}){{ $item->name }}</span>
+                                                                                </li>
+                                                                            </ul>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @endif
+
+                                                                @error('siswa')
+                                                                    <span class="text-danger">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
+
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <div>
+                                                                    <div class="input-group mb-3">
+                                                                        <span class="input-group-text"
+                                                                            id="basic-addon1">Rp.</span>
+                                                                        <input disabled type="number"
+                                                                            wire:model.live="amount"
+                                                                            class="form-control"
+                                                                            placeholder="Total Uang"
+                                                                            aria-label="Total Uang"
+                                                                            aria-describedby="basic-addon1">
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="mb-3">
+                                                                <label for="startOfWeek" class="form-label">Mulai Minggu
+                                                                    Pembayaran</label>
+                                                                <input type="date" class="form-control"
+                                                                    id="cutomDate1" wire:model="startOfWeek"
+                                                                    onchange="validateDay(this)">
+
+                                                                @error('startOfWeek')
+                                                                    <span class="text-danger">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="card">
+
+                                                                <div class="card-body">
+                                                                    <div
+                                                                        class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
+                                                                        <div class="icheck-primary d-inline">
+                                                                            <input type="checkbox" id="checkboxPrimary1"
+                                                                                wire:model.live="check_senin">
+                                                                            <label for="checkboxPrimary1">Senin</label>
+                                                                        </div>
+                                                                        <div>
+                                                                            <input
+                                                                                class="ms-3 w-75 custom-number-meal form-control"
+                                                                                type="number" min="1"
+                                                                                max="2"
+                                                                                wire:model.live="count_meal_senin">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
+                                                                        <div class="icheck-primary d-inline">
+                                                                            <input type="checkbox" id="checkboxPrimary2"
+                                                                                wire:model.live="check_selasa">
+                                                                            <label for="checkboxPrimary2">Selasa</label>
+                                                                        </div>
+                                                                        <div>
+                                                                            <input
+                                                                                class="ms-3 w-75 custom-number-meal form-control"
+                                                                                type="number" min="1"
+                                                                                max="2"
+                                                                                wire:model.live="count_meal_selasa">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
+                                                                        <div class="icheck-primary d-inline">
+                                                                            <input type="checkbox"
+                                                                                id="checkboxPrimary3"
+                                                                                wire:model.live="check_rabu">
+                                                                            <label for="checkboxPrimary3">Rabu</label>
+                                                                        </div>
+                                                                        <div>
+                                                                            <input
+                                                                                class="ms-3 w-75 custom-number-meal form-control"
+                                                                                type="number" min="1"
+                                                                                max="2"
+                                                                                wire:model.live="count_meal_rabu">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
+                                                                        <div class="icheck-primary d-inline">
+                                                                            <input type="checkbox"
+                                                                                id="checkboxPrimary4"
+                                                                                wire:model.live="check_kamis">
+                                                                            <label for="checkboxPrimary4">Kamis</label>
+                                                                        </div>
+                                                                        <div>
+                                                                            <input
+                                                                                class="ms-3 w-75 custom-number-meal form-control"
+                                                                                type="number" min="1"
+                                                                                max="2"
+                                                                                wire:model.live="count_meal_kamis">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
+                                                                        <div class="icheck-primary d-inline">
+                                                                            <input type="checkbox"
+                                                                                id="checkboxPrimary5"
+                                                                                wire:model.live="check_jumat">
+                                                                            <label
+                                                                                for="checkboxPrimary5">Jum'at</label>
+                                                                        </div>
+                                                                        <div>
+                                                                            <input
+                                                                                class="ms-3 w-75 custom-number-meal form-control"
+                                                                                type="number" min="1"
+                                                                                max="2"
+                                                                                wire:model.live="count_meal_jumat">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <button type="button" wire:click="submit"
+                                                        class="btn btn-primary">Simpan</button>
+                                                </form>
+
+                                            </div>
+                                        @elseif ($typeAdd == 'pemasukan_lainnya')
+                                            <div class="mb-3">
                                                 <div class="row">
-
                                                     <div class="col-md-6">
                                                         <div class="mb-3 position-relative">
                                                             <label for="NamaU" class="form-label">Siswa</label>
@@ -93,7 +269,8 @@
                                                                     @endforeach
                                                                 </select>
                                                                 <input type="text" placeholder="Cari Siswa..."
-                                                                    class="form-control" wire:model.live="SearchSiswa">
+                                                                    class="form-control"
+                                                                    wire:model.live="SearchSiswa">
 
                                                             </div>
 
@@ -121,176 +298,141 @@
                                                                 <div class="input-group mb-3">
                                                                     <span class="input-group-text"
                                                                         id="basic-addon1">Rp.</span>
-                                                                    <input disabled type="number"
-                                                                        wire:model.live="amount" class="form-control"
-                                                                        placeholder="Total Uang" aria-label="Total Uang"
+                                                                    <input type="number"
+                                                                        wire:model.live="amountGlobal"
+                                                                        class="form-control" placeholder="Total Uang"
+                                                                        aria-label="Total Uang"
                                                                         aria-describedby="basic-addon1">
                                                                 </div>
+                                                                @error('amountGlobal')
+                                                                    <span class="text-danger">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
                                                             </div>
 
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label for="startOfWeek" class="form-label">Mulai Minggu
-                                                                Pembayaran</label>
-                                                            <input type="date" class="form-control" id="cutomDate1"
-                                                                wire:model="startOfWeek" onchange="validateDay(this)">
-
-                                                            @error('startOfWeek')
+                                                            <label for="NamaU" class="form-label">Tanggal</label>
+                                                            <input type="date" class="form-control"
+                                                                wire:model="dateIncome">
+                                                            @error('dateIncome')
                                                                 <span class="text-danger">
                                                                     {{ $message }}
                                                                 </span>
                                                             @enderror
                                                         </div>
+
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <div class="card">
-
-                                                            <div class="card-body">
-                                                                <div
-                                                                    class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
-                                                                    <div class="icheck-primary d-inline">
-                                                                        <input type="checkbox" id="checkboxPrimary1"
-                                                                            wire:model.live="check_senin">
-                                                                        <label for="checkboxPrimary1">Senin</label>
-                                                                    </div>
-                                                                    <div>
-                                                                        <input
-                                                                            class="ms-3 w-75 custom-number-meal form-control"
-                                                                            type="number" min="1" max="2"
-                                                                            wire:model.live="count_meal_senin">
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
-                                                                    <div class="icheck-primary d-inline">
-                                                                        <input type="checkbox" id="checkboxPrimary2"
-                                                                            wire:model.live="check_selasa">
-                                                                        <label for="checkboxPrimary2">Selasa</label>
-                                                                    </div>
-                                                                    <div>
-                                                                        <input
-                                                                            class="ms-3 w-75 custom-number-meal form-control"
-                                                                            type="number" min="1"
-                                                                            max="2"
-                                                                            wire:model.live="count_meal_selasa">
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
-                                                                    <div class="icheck-primary d-inline">
-                                                                        <input type="checkbox" id="checkboxPrimary3"
-                                                                            wire:model.live="check_rabu">
-                                                                        <label for="checkboxPrimary3">Rabu</label>
-                                                                    </div>
-                                                                    <div>
-                                                                        <input
-                                                                            class="ms-3 w-75 custom-number-meal form-control"
-                                                                            type="number" min="1"
-                                                                            max="2"
-                                                                            wire:model.live="count_meal_rabu">
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
-                                                                    <div class="icheck-primary d-inline">
-                                                                        <input type="checkbox" id="checkboxPrimary4"
-                                                                            wire:model.live="check_kamis">
-                                                                        <label for="checkboxPrimary4">Kamis</label>
-                                                                    </div>
-                                                                    <div>
-                                                                        <input
-                                                                            class="ms-3 w-75 custom-number-meal form-control"
-                                                                            type="number" min="1"
-                                                                            max="2"
-                                                                            wire:model.live="count_meal_kamis">
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="form-group clearfix mb-3 d-flex justify-content-between align-items-center">
-                                                                    <div class="icheck-primary d-inline">
-                                                                        <input type="checkbox" id="checkboxPrimary5"
-                                                                            wire:model.live="check_jumat">
-                                                                        <label for="checkboxPrimary5">Jum'at</label>
-                                                                    </div>
-                                                                    <div>
-                                                                        <input
-                                                                            class="ms-3 w-75 custom-number-meal form-control"
-                                                                            type="number" min="1"
-                                                                            max="2"
-                                                                            wire:model.live="count_meal_jumat">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
+                                                        <div class="mb-3">
+                                                            <label for="NamaU" class="form-label">Deskripsi</label>
+                                                            <textarea type="date" class="form-control" wire:model="deskripsi"></textarea>
+                                                            @error('deskripsi')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
 
+                                            <div class="mb-3">
+                                                <button class="btn btn-primary btn-sm" wire:click='AddIncomeLainnya'
+                                                    type="button">Simpan</button>
+                                            </div>
+                                        @elseif ($typeAdd = 'input_expense')
+                                            <div class="mb-3">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3 position-relative">
+                                                            <label for="NamaU" class="form-label">Siswa</label>
+                                                            <div class="input-group">
 
+                                                                <select wire:model="siswa" id="selectOp"
+                                                                    class="form-control searchSelect"
+                                                                    @if (!empty($SearchSiswa)) disabled @endif>
+                                                                    <option value=""
+                                                                        @if (!$siswa) selected @endif>
+                                                                        ----Pilih----</option>
 
-                                                <button type="button" wire:click="submit"
-                                                    class="btn btn-primary">Simpan</button>
-                                            </form>
+                                                                    @foreach ($DataSiswa as $item)
+                                                                        <option
+                                                                            @if ($siswa == $item->id) selected @endif
+                                                                            value="{{ $item->id }}">
+                                                                            {{ $item->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <input type="text" placeholder="Cari Siswa..."
+                                                                    class="form-control"
+                                                                    wire:model.live="SearchSiswa">
 
-                                        </div>
-                                    @elseif ($typeAdd == 'pemasukan_lainnya')
-                                        <div class="mb-3">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3 position-relative">
-                                                        <label for="NamaU" class="form-label">Siswa</label>
-                                                        <div class="input-group">
+                                                            </div>
 
-                                                            <select wire:model="siswa" id="selectOp"
-                                                                class="form-control searchSelect"
-                                                                @if (!empty($SearchSiswa)) disabled @endif>
-                                                                <option value=""
-                                                                    @if (!$siswa) selected @endif>
-                                                                    ----Pilih----</option>
+                                                            @if (!empty($SearchSiswa))
+                                                                <div class="mb-3 mt-3">
+                                                                    @foreach ($DataSiswa as $item)
+                                                                        <ul>
+                                                                            <li><span
+                                                                                    wire:click="setSiswa({{ $item->id }})">({{ $item->batch }}){{ $item->name }}</span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
 
-                                                                @foreach ($DataSiswa as $item)
-                                                                    <option
-                                                                        @if ($siswa == $item->id) selected @endif
-                                                                        value="{{ $item->id }}">{{ $item->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <input type="text" placeholder="Cari Siswa..."
-                                                                class="form-control" wire:model.live="SearchSiswa">
+                                                            @error('siswa')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
+
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <div>
+                                                                <div class="input-group mb-3">
+                                                                    <span class="input-group-text"
+                                                                        id="basic-addon1">Rp.</span>
+                                                                    <input type="number"
+                                                                        wire:model.live="amountGlobal"
+                                                                        class="form-control" placeholder="Total Uang"
+                                                                        aria-label="Total Uang"
+                                                                        aria-describedby="basic-addon1">
+                                                                </div>
+                                                                @error('amountGlobal')
+                                                                    <span class="text-danger">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
+                                                            </div>
 
                                                         </div>
 
-                                                        @if (!empty($SearchSiswa))
-                                                            <div class="mb-3 mt-3">
-                                                                @foreach ($DataSiswa as $item)
-                                                                    <ul>
-                                                                        <li><span
-                                                                                wire:click="setSiswa({{ $item->id }})">({{ $item->batch }}){{ $item->name }}</span>
-                                                                        </li>
-                                                                    </ul>
-                                                                @endforeach
-                                                            </div>
-                                                        @endif
+                                                        <div class="mb-3">
+                                                            <label for="NamaU" class="form-label">Tanggal</label>
+                                                            <input type="date" class="form-control"
+                                                                wire:model="dateIncome">
+                                                            @error('dateIncome')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
+                                                        </div>
 
-                                                        @error('siswa')
-                                                            <span class="text-danger">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
+                                                        <div class="mb-3">
+                                                            <label for="NamaU" class="form-label">Jenis
+                                                                Pengeluaran</label>
 
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <div>
-                                                            <div class="input-group mb-3">
-                                                                <span class="input-group-text"
-                                                                    id="basic-addon1">Rp.</span>
-                                                                <input type="number" wire:model.live="amountGlobal"
-                                                                    class="form-control" placeholder="Total Uang"
-                                                                    aria-label="Total Uang"
-                                                                    aria-describedby="basic-addon1">
-                                                            </div>
-                                                            @error('amountGlobal')
+                                                            <select class="form-control"
+                                                                wire:model.live='type_amount'>
+                                                                <option value="meal">Makanan</option>
+                                                                <option value="others">Lainnya</option>
+                                                            </select>
+
+                                                            @error('type_amount')
                                                                 <span class="text-danger">
                                                                     {{ $message }}
                                                                 </span>
@@ -298,174 +440,55 @@
                                                         </div>
 
                                                     </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="NamaU" class="form-label">Tanggal</label>
-                                                        <input type="date" class="form-control"
-                                                            wire:model="dateIncome">
-                                                        @error('dateIncome')
-                                                            <span class="text-danger">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="NamaU" class="form-label">Deskripsi</label>
-                                                        <textarea type="date" class="form-control" wire:model="deskripsi"></textarea>
-                                                        @error('deskripsi')
-                                                            <span class="text-danger">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <button class="btn btn-primary btn-sm" wire:click='AddIncomeLainnya'
-                                                type="button">Simpan</button>
-                                        </div>
-                                    @elseif ($typeAdd = 'input_expense')
-                                        <div class="mb-3">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3 position-relative">
-                                                        <label for="NamaU" class="form-label">Siswa</label>
-                                                        <div class="input-group">
-
-                                                            <select wire:model="siswa" id="selectOp"
-                                                                class="form-control searchSelect"
-                                                                @if (!empty($SearchSiswa)) disabled @endif>
-                                                                <option value=""
-                                                                    @if (!$siswa) selected @endif>
-                                                                    ----Pilih----</option>
-
-                                                                @foreach ($DataSiswa as $item)
-                                                                    <option
-                                                                        @if ($siswa == $item->id) selected @endif
-                                                                        value="{{ $item->id }}">
-                                                                        {{ $item->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <input type="text" placeholder="Cari Siswa..."
-                                                                class="form-control" wire:model.live="SearchSiswa">
-
-                                                        </div>
-
-                                                        @if (!empty($SearchSiswa))
-                                                            <div class="mb-3 mt-3">
-                                                                @foreach ($DataSiswa as $item)
-                                                                    <ul>
-                                                                        <li><span
-                                                                                wire:click="setSiswa({{ $item->id }})">({{ $item->batch }}){{ $item->name }}</span>
-                                                                        </li>
-                                                                    </ul>
-                                                                @endforeach
-                                                            </div>
-                                                        @endif
-
-                                                        @error('siswa')
-                                                            <span class="text-danger">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <div>
-                                                            <div class="input-group mb-3">
-                                                                <span class="input-group-text"
-                                                                    id="basic-addon1">Rp.</span>
-                                                                <input type="number" wire:model.live="amountGlobal"
-                                                                    class="form-control" placeholder="Total Uang"
-                                                                    aria-label="Total Uang"
-                                                                    aria-describedby="basic-addon1">
-                                                            </div>
-                                                            @error('amountGlobal')
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="NamaU" class="form-label">Deskripsi</label>
+                                                            <textarea type="date" class="form-control" wire:model="deskripsi"></textarea>
+                                                            @error('deskripsi')
                                                                 <span class="text-danger">
                                                                     {{ $message }}
                                                                 </span>
                                                             @enderror
                                                         </div>
-
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="NamaU" class="form-label">Tanggal</label>
-                                                        <input type="date" class="form-control"
-                                                            wire:model="dateIncome">
-                                                        @error('dateIncome')
-                                                            <span class="text-danger">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="NamaU" class="form-label">Jenis
-                                                            Pengeluaran</label>
-
-                                                        <select class="form-control" wire:model.live='type_amount'>
-                                                            <option value="meal">Makanan</option>
-                                                            <option value="others">Lainnya</option>
-                                                        </select>
-
-                                                        @error('type_amount')
-                                                            <span class="text-danger">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="NamaU" class="form-label">Deskripsi</label>
-                                                        <textarea type="date" class="form-control" wire:model="deskripsi"></textarea>
-                                                        @error('deskripsi')
-                                                            <span class="text-danger">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="mb-3">
-                                            <button class="btn btn-primary btn-sm" wire:click='AddExpense'
-                                                type="button">Simpan</button>
-                                        </div>
-                                    @endif
-                                    {{-- <div class="form-group clearfix">
-                                            <div class="icheck-primary d-inline">
-                                                <input type="checkbox" id="checkboxPrimary1" checked>
-                                                <label for="checkboxPrimary1">
-                                                </label>
+                                            <div class="mb-3">
+                                                <button class="btn btn-primary btn-sm" wire:click='AddExpense'
+                                                    type="button">Simpan</button>
                                             </div>
-                                            <div class="icheck-primary d-inline">
-                                                <input type="checkbox" id="checkboxPrimary2">
-                                                <label for="checkboxPrimary2">
-                                                </label>
-                                            </div>
-                                            <div class="icheck-primary d-inline">
-                                                <input type="checkbox" id="checkboxPrimary3" disabled>
-                                                <label for="checkboxPrimary3">
-                                                    Primary checkbox
-                                                </label>
-                                            </div>
-                                        </div> 
-                                    --}}
+                                        @endif
+                                        {{-- <div class="form-group clearfix">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="checkboxPrimary1" checked>
+                                        <label for="checkboxPrimary1">
+                                        </label>
+                                    </div>
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="checkboxPrimary2">
+                                        <label for="checkboxPrimary2">
+                                        </label>
+                                    </div>
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="checkboxPrimary3" disabled>
+                                        <label for="checkboxPrimary3">
+                                            Primary checkbox
+                                        </label>
+                                    </div>
+                                </div> 
+                            --}}
+                                    </div>
+                                    <!-- /.card-body -->
+
                                 </div>
-                                <!-- /.card-body -->
-
                             </div>
+
                         @endif
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0" style="height: 400px;">
+
                         <div class="mb-3">
                             <input type="text" wire:model.live="search" class="form-control"
                                 placeholder="Cari transaksi...">
@@ -538,7 +561,9 @@
                         </table>
                     </div>
 
-                    {{ $DataTransaction->links('') }}
+                    {{-- {{ $DataTransaction->links('') }} --}}
+                    {{ $DataTransaction->onEachSide(1)->links() }}
+
                     <!-- /.card-body -->
                 </div>
             </div><!-- /.container-fluid -->

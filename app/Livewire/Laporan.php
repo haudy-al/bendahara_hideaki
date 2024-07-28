@@ -15,6 +15,7 @@ class Laporan extends Component
     use WithPagination;
     public $month;
     public $week;
+    public $date;
     function mount()
     {
         $this->month = Carbon::now()->format('Y-m');
@@ -26,6 +27,12 @@ class Laporan extends Component
     {
         // dd($this->getTransactionMonthIncome());
 
+        if ($this->date) {
+            $date = Carbon::create($this->date);
+
+            $this->month = $date->format('Y-m');
+        }
+
         return view('livewire.laporan', [
             'DataTransaction' => $this->getTransaction('income'),
             'DataTransactionsExpense' => $this->getTransaction('expense'),
@@ -34,11 +41,31 @@ class Laporan extends Component
         ]);
     }
 
+    public function updatedDate()
+    {
+        $date = Carbon::create($this->date);
+
+        if ($date->dayOfWeek !== Carbon::SUNDAY) {
+            $this->date = null;
+            $this->dispatch('danger', ['message' => 'Silahkan Pilih Hari Minggu']);
+
+        }
+    }
+
     function getTransaction($type)
     {
-        $startOfMonth = Carbon::create($this->month)->startOfMonth();
-        $startDate = $startOfMonth->copy()->addWeeks($this->week - 1);
-        $endDate = $startDate->copy()->endOfWeek();
+        // $startOfMonth = Carbon::create($this->month)->startOfMonth();
+        // $startDate = $startOfMonth->copy()->addWeeks($this->week - 1);
+
+        // $endDate = $startDate->copy()->addDays(5);
+
+        if ($this->date) {
+            $this->updatedDate();
+            
+        }
+
+        $startDate = Carbon::create($this->date);
+        $endDate = $startDate->copy()->addDays(6);
 
         $DataTransactions = Transaction::with(['user' => function ($query) {
             $query->orderBy('batch', 'DESC');
@@ -66,9 +93,12 @@ class Laporan extends Component
 
     public function export($type = 'income')
     {
-        $startOfMonth = Carbon::create($this->month)->startOfMonth();
-        $startDate = $startOfMonth->copy()->addWeeks($this->week - 1);
-        $endDate = $startDate->copy()->endOfWeek();
+        // $startOfMonth = Carbon::create($this->month)->startOfMonth();
+        // $startDate = $startOfMonth->copy()->addWeeks($this->week - 1);
+        // $endDate = $startDate->copy()->endOfWeek();
+
+        $startDate = Carbon::create($this->date);
+        $endDate = $startDate->copy()->addDays(6);
 
         $transactions = Transaction::with(['user' => function ($query) {
             $query->orderBy('batch', 'DESC');
@@ -77,7 +107,7 @@ class Laporan extends Component
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
 
-        return Excel::download(new TransactionsExport($transactions, $type), 'transactions_' . $this->month . '__week_' . $this->week . '.xlsx');
+        return Excel::download(new TransactionsExport($transactions, $type), 'transactions_' . $this->date . '.xlsx');
     }
 
     public function exportMonth($type = 'income')
@@ -90,6 +120,6 @@ class Laporan extends Component
             ->whereMonth('date', $month)
             ->get();
 
-        return Excel::download(new TransactionsExport($transactions, $type), 'transactions_' . $this->month . '__week_' . '.xlsx');
+        return Excel::download(new TransactionsExport($transactions, $type), 'transactions_' . $this->month . '.xlsx');
     }
 }
