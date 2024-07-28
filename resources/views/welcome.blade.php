@@ -49,7 +49,7 @@
                         <a class="nav-link" href="#contact">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-primary text-white" href="{{ route('login') }}">Login</a>
+                        <a class="nav-link btn btn-outline-primary " href="{{ route('login') }}">Login</a>
                     </li>
                 </ul>
             </div>

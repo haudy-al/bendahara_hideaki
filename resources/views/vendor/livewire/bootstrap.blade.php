@@ -13,9 +13,9 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
 <div>
     @if ($paginator->hasPages())
         <nav class="d-flex justify-items-center justify-content-between">
-            <div class="d-none d-flex justify-content-between flex-fill d-sm-none">
+            <div class="d-none  justify-content-between flex-fill ">
                 <ul class="pagination">
-                    {{-- Previous Page Link --}}
+                    
                     @if ($paginator->onFirstPage())
                         <li class="page-item disabled" aria-disabled="true">
                             <span class="page-link">@lang('pagination.previous')</span>
@@ -26,7 +26,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                         </li>
                     @endif
 
-                    {{-- Next Page Link --}}
+                    
                     @if ($paginator->hasMorePages())
                         <li class="page-item">
                             <button type="button" dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}" class="page-link" wire:click="nextPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled">@lang('pagination.next')</button>
